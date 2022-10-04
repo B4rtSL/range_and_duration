@@ -1,0 +1,229 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Header from "./components/Header";
+import NumberInput from "./components/NumberInput";
+import Plotly from 'plotly.js-dist-min';
+import "./App.css";
+
+//TO DO: add prop number input 
+
+const App = () => {
+  const [proptype, setProptype] = useState("propeller");
+  const [propnumber, setPropnumber] = useState(2);
+  const [startmass, setStartMass] = useState(2200);
+  const [altitude, setAltitude] = useState(0);
+  const [nompow, setNompow] = useState(290);
+  const [efficiency, setEfficiency] = useState(0.8);
+  const [fuelcons, setFuelcons] = useState(0.23);
+  const [aspectratio, setAspectratio] = useState(8.7);
+  const [cx0, setCx0] = useState(0.0265);
+  const [area, setArea] = useState(17.02);
+  const[vmin,setVmin]=useState(35);
+  const[vmax,setVmax]=useState(150);
+
+  const [trace, setTrace] = useState([
+    {
+      x: [],
+      y: [],
+    },
+  ]);
+
+  let layout = {
+    title: {
+      text: "Flight range and duration graph",
+      font: {
+        family: "Tahoma",
+        size: 24,
+      },
+    },
+    xaxis: {
+      title: {
+        text: "V [km/h]",
+        font: {
+          family: "Courier New, monospace",
+          size: 14,
+          color: "#7f7f7f",
+        },
+      },
+    },
+    yaxis: {
+      title: {
+        text: "",
+        font: {
+          family: "Courier New, monospace",
+          size: 14,
+          color: "#7f7f7f",
+        },
+      },
+    },
+  };
+
+  useEffect(() => {
+    Plotly.newPlot("plot", trace, layout);
+  });
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    //Warning user about empty data boxes:
+
+    // if (
+    //   !(
+    //     startmass &&
+    //     altitude &&
+    //     nompow &&
+    //     efficiency &&
+    //     fuelcons &&
+    //     aspectratio &&
+    //     cx0 &&
+    //     area
+    //   )
+    // ) {
+    //   alert("Please enter values in each box");
+    //   return;
+    // }
+    console.log({
+      proptype,
+      propnumber,
+      startmass,
+      altitude,
+      nompow,
+      efficiency,
+      fuelcons,
+      aspectratio,
+      cx0,
+      area,
+      vmin,
+      vmax
+    });
+    let response = await axios.post("http://127.0.0.1:8000/", {
+    altitude,
+    area,
+    aspectratio,
+    cx0,
+    efficiency,
+    fuelcons,
+    nompow,
+    propnumber,
+    proptype,
+    startmass,
+    vmax,
+    vmin
+    })
+    console.log(response.data) 
+    setTrace(()=> response.data)
+  };  
+
+  return (
+   
+    
+    <div className="flex flex-row">
+    <div className="split left">
+      <Header />
+
+      <form onSubmit={onSubmit}>
+
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Select propulsion type</span>
+          </label>
+          <select
+            className="select select-bordered w-full max-w-xs"
+            value={proptype}
+            name="proptype"
+            id="propselect"
+            onChange={(e) => setProptype(e.target.value)}
+          >
+            <option value="propeller">Propeller</option>
+            <option value="jet">Jet</option>
+          </select>
+        </div>
+
+        <NumberInput
+          label="Number of propellers"
+          unit="none"
+          value={propnumber}
+          setter={setPropnumber}
+        />
+
+        <NumberInput
+          label="Starting mass"
+          unit="kg"
+          value={startmass}
+          setter={setStartMass}
+        />
+
+        <NumberInput
+          label="Flight altitude"
+          unit="m"
+          value={altitude}
+          setter={setAltitude}
+        />
+
+        <NumberInput
+          label="Nominal power"
+          unit="kW"
+          value={nompow}
+          setter={setNompow}
+        />
+
+        <NumberInput
+          label="Propeller efficiency ratio"
+          unit="none"
+          value={efficiency}
+          setter={setEfficiency}
+        />
+
+        <NumberInput
+          label="Specific fuel consumption"
+          unit="kg/kW/h"
+          value={fuelcons}
+          setter={setFuelcons}
+        />
+
+        <NumberInput
+          label="Effective Aspect Ratio"
+          unit="none"
+          value={aspectratio}
+          setter={setAspectratio}
+        />
+
+        <NumberInput
+          label="Minimal drag coefficient"
+          unit="none"
+          value={cx0}
+          setter={setCx0}
+        />
+
+        <NumberInput
+          label="Wing area"
+          unit="m^2"
+          value={area}
+          setter={setArea}
+        />
+
+        <NumberInput
+          label="Minimal velocity"
+          unit="m/s"
+          value={vmin}
+          setter={setVmin}
+        />
+
+        <NumberInput
+          label="Maximal velocity"
+          unit="m/s"
+          value={vmax}
+          setter={setVmax}
+        />
+
+        <input type="submit" value="Save Inputs" className="btn"  />
+      </form>
+    </div>
+    <div className="w-1/2">
+      <div id="plot" ></div>               
+    </div>
+    </div>
+ 
+  );
+};
+
+export default App;
