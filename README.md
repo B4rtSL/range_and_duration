@@ -1,2 +1,2 @@
 # range_and_duration
-Range
+Range and duration of flight calculating app developed as pre-bachelor's thesis.
