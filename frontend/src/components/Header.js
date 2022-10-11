@@ -11,7 +11,7 @@ const Header = ({ par }) => {
 };
 
 Header.defaultProps = {
-  par: "Range Calculator",
+  par: "Range and Duration Calculator",
 };
 
 Header.propTypes = {

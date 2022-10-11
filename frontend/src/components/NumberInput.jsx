@@ -5,18 +5,22 @@ import React from "react";
 const NumberInput = ({ label, unit, value, setter }) => {
   const onChange = (e) => setter(() => parseFloat(e.target.value));
   return (
-    <div className="form-control w-full max-w-xs">
+    <div className="form-control">
       <label className="label">
         <span className="label-text">{label}</span>
-        <span className="label-text-alt">Unit: {unit}</span>
       </label>
-      <input
-        type="number"
-        placeholder="Type value here"
-        className="input input-bordered w-full max-w-xs"
-        value={value}
-        onChange={onChange}
-      />
+      <label className="input-group flex items-center">
+        <input
+          type="number"
+          placeholder="Type value here"
+          className="input input-bordered w-44"
+          value={value}
+          onChange={onChange}
+        />
+        <span className="flex flex-row items-center justify-center bg-gray-200 px-1 w-20 rounded-lg h-12">
+          {unit}
+        </span>
+      </label>
     </div>
   );
 };

@@ -114,113 +114,117 @@ const App = () => {
   };  
 
   return (
-   
-    
-    <div className="flex flex-row">
-    <div className="split left">
-      <Header />
+ 
 
-      <form onSubmit={onSubmit}>
+    <div className="flex flex-col place-items-center">
+      <div className="container">
+        <Header/>
+        <form className="flex flex-wrap w-full place-content-center gap-5" onSubmit={onSubmit}>
 
-        <div className="form-control w-full max-w-xs">
-          <label className="label">
-            <span className="label-text">Select propulsion type</span>
-          </label>
-          <select
-            className="select select-bordered w-full max-w-xs"
-            value={proptype}
-            name="proptype"
-            id="propselect"
-            onChange={(e) => setProptype(e.target.value)}
-          >
-            <option value="propeller">Propeller</option>
-            <option value="jet">Jet</option>
-          </select>
-        </div>
+          
 
-        <NumberInput
-          label="Number of propellers"
-          unit="none"
-          value={propnumber}
-          setter={setPropnumber}
-        />
+          <div className="form-control w-64">
+            <label className="label">
+              <span className="label-text">Select propulsion type</span>
+            </label>
+            <select
+              className="select select-bordered w-full"
+              value={proptype}
+              name="proptype"
+              id="propselect"
+              onChange={(e) => setProptype(e.target.value)}
+            >
+              <option value="propeller">Propeller</option>
+              <option value="jet">Jet</option>
+            </select>
+          </div>
 
-        <NumberInput
-          label="Starting mass"
-          unit="kg"
-          value={startmass}
-          setter={setStartMass}
-        />
+          <NumberInput
+            label="Number of propellers"
+            unit="none"
+            value={propnumber}
+            setter={setPropnumber}
+          />
 
-        <NumberInput
-          label="Flight altitude"
-          unit="m"
-          value={altitude}
-          setter={setAltitude}
-        />
+          <NumberInput
+            label="Starting mass"
+            unit="kg"
+            value={startmass}
+            setter={setStartMass}
+          />
 
-        <NumberInput
-          label="Nominal power"
-          unit="kW"
-          value={nompow}
-          setter={setNompow}
-        />
+          <NumberInput
+            label="Flight altitude"
+            unit="m"
+            value={altitude}
+            setter={setAltitude}
+          />
 
-        <NumberInput
-          label="Propeller efficiency ratio"
-          unit="none"
-          value={efficiency}
-          setter={setEfficiency}
-        />
+          <NumberInput
+            label="Nominal power"
+            unit="kW"
+            value={nompow}
+            setter={setNompow}
+          />
 
-        <NumberInput
-          label="Specific fuel consumption"
-          unit="kg/kW/h"
-          value={fuelcons}
-          setter={setFuelcons}
-        />
+          <NumberInput
+            label="Propeller efficiency ratio"
+            unit="none"
+            value={efficiency}
+            setter={setEfficiency}
+          />
 
-        <NumberInput
-          label="Effective Aspect Ratio"
-          unit="none"
-          value={aspectratio}
-          setter={setAspectratio}
-        />
+          <NumberInput
+            label="Specific fuel consumption"
+            unit="kg/kW/h"
+            value={fuelcons}
+            setter={setFuelcons}
+          />
 
-        <NumberInput
-          label="Minimal drag coefficient"
-          unit="none"
-          value={cx0}
-          setter={setCx0}
-        />
+          <NumberInput
+            label="Effective Aspect Ratio"
+            unit="none"
+            value={aspectratio}
+            setter={setAspectratio}
+          />
 
-        <NumberInput
-          label="Wing area"
-          unit="m^2"
-          value={area}
-          setter={setArea}
-        />
+          <NumberInput
+            className="w-full"
+            label="Minimal drag coefficient"
+            unit="none"
+            value={cx0}
+            setter={setCx0}
+          />
 
-        <NumberInput
-          label="Minimal velocity"
-          unit="m/s"
-          value={vmin}
-          setter={setVmin}
-        />
+          <NumberInput
+            label="Wing area"
+            unit="m^2"
+            value={area}
+            setter={setArea}
+          />
 
-        <NumberInput
-          label="Maximal velocity"
-          unit="m/s"
-          value={vmax}
-          setter={setVmax}
-        />
+          <NumberInput
+            label="Minimal velocity"
+            unit="m/s"
+            value={vmin}
+            setter={setVmin}
+          />
 
-        <input type="submit" value="Save Inputs" className="btn"  />
-      </form>
-    </div>
-    <div className="w-1/2">
-      <div id="plot" ></div>               
-    </div>
+          <NumberInput
+            label="Maximal velocity"
+            unit="m/s"
+            value={vmax}
+            setter={setVmax}
+          />
+          <div className="break"></div>
+          <input type="submit" value="Save Inputs" className="btn flex items-center justify-center align-self-center"  />
+        </form>
+      </div>
+
+      <div className="flex justify-center w-1/2 p-2">
+        <div id="plot" ></div>               
+      </div>
+
     </div>
  
   );
