@@ -1,6 +1,8 @@
 import numpy as np
 import math
 import matplotlib.pyplot as plt
+from scipy import optimize
+from scipy.interpolate import interp1d
 
 startmass=2200
 nompow_prop=290                 #kW
@@ -21,7 +23,7 @@ fuelmass_prop=0.2*startmass-diffmass_prop
 endmass_prop=startmass-fuelmass_prop                            
 
 #array of velocities
-x=np.linspace(15,100,100)
+velos=np.linspace(15,100,50)
 #print(x)
 
 times=[]
@@ -29,7 +31,7 @@ ranges=[]
 czs=[]
 cxs=[]
 
-for i in x:
+for i in velos:
     cz=2*startmass*9.81/air_density/area/i/i
     cx=cx0+cz*cz/3.14/aspectratio
     czs.append(cz)
@@ -48,7 +50,7 @@ for i in czs:
 
 #plt.plot(cxs_arr, czs_arr)
 
-#for i in x:
+#for i in velos:
     #A_factor=air_density*area*i*i*math.sqrt(cx0*3.14*aspectratio)
     #time=1000*(efficiency/9.81/i/fuelcons_prop)*math.sqrt(3.14*aspectratio/cx0)*(math.atan(2*9.81*startmass/A_factor)-math.atan(2*9.81*endmass_prop/A_factor))
     #range=3.6*i*time
@@ -58,11 +60,26 @@ for i in czs:
 times_arr=100*np.array(times)     
 ranges_arr=np.array(ranges) 
 
-x_list=list(x*3.6)
+f=interp1d(velos, times_arr, kind='cubic')
+
+poly_coef=np.polyfit(velos, times_arr, 4)
+print(poly_coef)
+
+poly_roots=np.roots(poly_coef)
+#print(poly_roots)
+
+def g(x):
+    return (-1)*(poly_coef[0]*(x)**4+poly_coef[1]*(x)**3+poly_coef[2]*(x)**2+poly_coef[3]*(x)+poly_coef[4])
+
+res=optimize.minimize_scalar(g, bounds=(15,100), method='bounded')
+print(res.x)
+
+x_list=list(velos*3.6)
 times_list=list(times_arr)    
 ranges_list=list(ranges_arr)
 
-plt.plot(3.6*x,times_arr, 3.6*x, ranges_arr)
+plt.plot(velos,times_arr,'o', velos, f(velos), '-')
+#plt.plot(3.6*x,times_arr, 3.6*x, ranges_arr)
 
 plt.show()
 
